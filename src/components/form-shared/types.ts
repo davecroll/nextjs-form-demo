@@ -9,11 +9,13 @@ export interface ViewConfig {
 
 // Generic form handle - works with any form data type
 export interface MultiViewFormHandle<T = unknown> {
-  setActiveView: (viewId: string) => Promise<void>;
+  setActiveView: (viewId: string) => void;
   goToNextView: () => Promise<void>;
   goToPreviousView: () => Promise<void>;
+  validateCurrentView: () => Promise<boolean>;
   validate: () => Promise<boolean>;
   getValues: () => T;
+  getActiveView: () => string;
 }
 
 export interface FormState {

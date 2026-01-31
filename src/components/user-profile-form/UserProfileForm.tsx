@@ -80,30 +80,30 @@ export const UserProfileForm = forwardRef<
     });
   }, [activeView, visitedViews, onStateChange, getErrorCounts]);
 
-  // Validate current view's fields before switching to a new view
+  // Simply switch to a new view (no validation - call validateCurrentView externally)
   const setActiveView = useCallback(
-    async (viewId: string) => {
+    (viewId: string) => {
       const validViewId = viewId as ViewId;
-
-      // Only validate if actually switching to a different view
-      if (validViewId === activeView) {
-        return;
+      if (validViewId !== activeView) {
+        setActiveViewState(validViewId);
       }
-
-      // Validate current view before leaving
-      const currentView = formViews.find((v) => v.id === activeView);
-      if (currentView) {
-        await trigger(currentView.fields as unknown as (keyof FormData)[]);
-        // Mark the view we're leaving as visited (validated)
-        setVisitedViews((prev) =>
-          prev.includes(activeView) ? prev : [...prev, activeView],
-        );
-      }
-
-      setActiveViewState(validViewId);
     },
-    [activeView, trigger],
+    [activeView],
   );
+
+  // Validate the current view and mark it as visited
+  const validateCurrentView = useCallback(async (): Promise<boolean> => {
+    const currentView = formViews.find((v) => v.id === activeView);
+    if (!currentView) return true;
+
+    const result = await trigger(
+      currentView.fields as unknown as (keyof FormData)[],
+    );
+    setVisitedViews((prev) =>
+      prev.includes(activeView) ? prev : [...prev, activeView],
+    );
+    return result;
+  }, [activeView, trigger]);
 
   const currentIndex = formViews.findIndex((v) => v.id === activeView);
   const isFirstView = currentIndex === 0;
@@ -111,23 +111,26 @@ export const UserProfileForm = forwardRef<
 
   const goToNextView = useCallback(async () => {
     if (currentIndex < formViews.length - 1) {
-      await setActiveView(formViews[currentIndex + 1].id);
+      await validateCurrentView();
+      setActiveView(formViews[currentIndex + 1].id);
     }
-  }, [currentIndex, setActiveView]);
+  }, [currentIndex, validateCurrentView, setActiveView]);
 
   const goToPreviousView = useCallback(async () => {
     if (currentIndex > 0) {
-      await setActiveView(formViews[currentIndex - 1].id);
+      await validateCurrentView();
+      setActiveView(formViews[currentIndex - 1].id);
     }
-  }, [currentIndex, setActiveView]);
+  }, [currentIndex, validateCurrentView, setActiveView]);
 
   // Validate the entire form and return whether it's valid
   const validate = useCallback(async (): Promise<boolean> => {
     const result = await trigger();
-    // Mark all views as visited
     setVisitedViews(formViews.map((v) => v.id));
     return result;
   }, [trigger]);
+
+  const getActiveView = useCallback(() => activeView, [activeView]);
 
   // Expose imperative methods via ref
   useImperativeHandle(
@@ -136,10 +139,20 @@ export const UserProfileForm = forwardRef<
       setActiveView,
       goToNextView,
       goToPreviousView,
+      validateCurrentView,
       validate,
       getValues,
+      getActiveView,
     }),
-    [setActiveView, goToNextView, goToPreviousView, validate, getValues],
+    [
+      setActiveView,
+      goToNextView,
+      goToPreviousView,
+      validateCurrentView,
+      validate,
+      getValues,
+      getActiveView,
+    ],
   );
 
   const onFormSubmit = handleSubmit((data) => {

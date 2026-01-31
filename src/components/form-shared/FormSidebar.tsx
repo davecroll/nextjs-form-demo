@@ -47,8 +47,16 @@ export function FormSidebar({
                   isActive={isActiveForm && form.state.activeView === view.id}
                   isVisited={form.state.visitedViews.includes(view.id)}
                   errorCount={form.state.errorCounts[view.id] || 0}
-                  onClick={() => {
-                    // First switch to this form, then switch to the view
+                  onClick={async () => {
+                    // Validate current form's current view before switching
+                    const currentForm = forms.find(
+                      (f) => f.id === activeFormId,
+                    );
+                    if (currentForm?.ref.current) {
+                      await currentForm.ref.current.validateCurrentView();
+                    }
+
+                    // Switch to target form and view
                     onFormSelect(form.id);
                     form.ref.current?.setActiveView(view.id);
                   }}
