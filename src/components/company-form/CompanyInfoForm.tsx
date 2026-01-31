@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { CompanyBasicsView } from "./views/CompanyBasicsView";
 import { CompanyDetailsView } from "./views/CompanyDetailsView";
-import { MultiViewFormHandle, FormState } from "@/components/multi-view-form/types";
+import { MultiViewFormHandle, FormState } from "@/components/form-shared/types";
 
 const viewComponents = {
   basics: CompanyBasicsView,

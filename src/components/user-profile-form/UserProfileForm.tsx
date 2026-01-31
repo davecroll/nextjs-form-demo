@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/Button";
 import { PersonalInfoView } from "./views/PersonalInfoView";
 import { ContactDetailsView } from "./views/ContactDetailsView";
 import { PreferencesView } from "./views/PreferencesView";
-import { MultiViewFormHandle, FormState } from "./types";
+import { MultiViewFormHandle, FormState } from "@/components/form-shared/types";
 
 const viewComponents = {
   personal: PersonalInfoView,
@@ -28,7 +28,7 @@ const viewComponents = {
   preferences: PreferencesView,
 } as const;
 
-interface MultiViewFormProps {
+interface UserProfileFormProps {
   onSubmit?: (data: FormData) => void;
   onStateChange?: (state: FormState) => void;
   initialView?: ViewId;
@@ -36,8 +36,8 @@ interface MultiViewFormProps {
   managed?: boolean;
 }
 
-export const MultiViewForm = forwardRef<MultiViewFormHandle<FormData>, MultiViewFormProps>(
-  function MultiViewForm({ onSubmit, onStateChange, initialView = "personal", managed = false }, ref) {
+export const UserProfileForm = forwardRef<MultiViewFormHandle<FormData>, UserProfileFormProps>(
+  function UserProfileForm({ onSubmit, onStateChange, initialView = "personal", managed = false }, ref) {
     const [activeView, setActiveViewState] = useState<ViewId>(initialView);
     const [visitedViews, setVisitedViews] = useState<string[]>([initialView]);
 

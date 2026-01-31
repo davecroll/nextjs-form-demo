@@ -1,13 +1,13 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
-import { MultiViewForm } from "@/components/multi-view-form/MultiViewForm";
+import { UserProfileForm } from "@/components/user-profile-form/UserProfileForm";
 import { CompanyInfoForm } from "@/components/company-form/CompanyInfoForm";
-import { FormSidebar } from "@/components/multi-view-form/FormSidebar";
+import { FormSidebar } from "@/components/form-shared/FormSidebar";
 import { Button } from "@/components/ui/Button";
 import { FormData, formViews } from "@/lib/schemas/formSchema";
 import { CompanyFormData, companyViews } from "@/lib/schemas/companySchema";
-import { MultiViewFormHandle, FormState, FormRegistration } from "@/components/multi-view-form/types";
+import { MultiViewFormHandle, FormState, FormRegistration } from "@/components/form-shared/types";
 
 const initialUserFormState: FormState = {
   activeView: "personal",
@@ -113,7 +113,7 @@ export default function FormPage() {
           <div className="flex-1 relative">
             {/* User Profile Form */}
             <div className={activeFormId === "user-profile" ? "block h-full" : "hidden"}>
-              <MultiViewForm
+              <UserProfileForm
                 ref={userFormRef}
                 onStateChange={setUserFormState}
                 managed
