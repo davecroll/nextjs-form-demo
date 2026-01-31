@@ -1,8 +1,8 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { CompanyFormData } from "@/lib/schemas/companySchema";
 import { Input } from "@/components/ui/Input";
+import type { CompanyFormData } from "@/lib/schemas/companySchema";
 
 export function CompanyBasicsView() {
   const {

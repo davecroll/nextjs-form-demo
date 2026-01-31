@@ -1,7 +1,7 @@
 "use client";
 
-import { FormRegistration } from "./types";
 import { FormNavItem } from "./FormNavItem";
+import type { FormRegistration } from "./types";
 
 interface FormSidebarProps {
   forms: FormRegistration[];
@@ -9,7 +9,11 @@ interface FormSidebarProps {
   onFormSelect: (formId: string) => void;
 }
 
-export function FormSidebar({ forms, activeFormId, onFormSelect }: FormSidebarProps) {
+export function FormSidebar({
+  forms,
+  activeFormId,
+  onFormSelect,
+}: FormSidebarProps) {
   return (
     <aside className="w-64 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto">
       {forms.map((form) => {

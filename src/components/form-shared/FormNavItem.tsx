@@ -53,6 +53,8 @@ export function FormNavItem({
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-label="Valid"
+            role="img"
           >
             <path
               strokeLinecap="round"

@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import type { RefObject } from "react";
 
 // Generic view configuration type
 export interface ViewConfig {

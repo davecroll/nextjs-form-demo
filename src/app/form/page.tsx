@@ -1,13 +1,20 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
-import { UserProfileForm } from "@/components/user-profile-form/UserProfileForm";
+import { useCallback, useRef, useState } from "react";
 import { CompanyInfoForm } from "@/components/company-form/CompanyInfoForm";
 import { FormSidebar } from "@/components/form-shared/FormSidebar";
+import type {
+  FormRegistration,
+  FormState,
+  MultiViewFormHandle,
+} from "@/components/form-shared/types";
 import { Button } from "@/components/ui/Button";
-import { FormData, formViews } from "@/lib/schemas/formSchema";
-import { CompanyFormData, companyViews } from "@/lib/schemas/companySchema";
-import { MultiViewFormHandle, FormState, FormRegistration } from "@/components/form-shared/types";
+import { UserProfileForm } from "@/components/user-profile-form/UserProfileForm";
+import {
+  type CompanyFormData,
+  companyViews,
+} from "@/lib/schemas/companySchema";
+import { type FormData, formViews } from "@/lib/schemas/formSchema";
 
 const initialUserFormState: FormState = {
   activeView: "personal",
@@ -30,8 +37,11 @@ export default function FormPage() {
   const [activeFormId, setActiveFormId] = useState("user-profile");
 
   // Track state for each form (for sidebar display)
-  const [userFormState, setUserFormState] = useState<FormState>(initialUserFormState);
-  const [companyFormState, setCompanyFormState] = useState<FormState>(initialCompanyFormState);
+  const [userFormState, setUserFormState] =
+    useState<FormState>(initialUserFormState);
+  const [companyFormState, setCompanyFormState] = useState<FormState>(
+    initialCompanyFormState,
+  );
 
   // Submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,7 +95,10 @@ export default function FormPage() {
       };
 
       console.log("All forms submitted:", combinedData);
-      alert("All forms submitted successfully!\n\n" + JSON.stringify(combinedData, null, 2));
+      alert(
+        "All forms submitted successfully!\n\n" +
+          JSON.stringify(combinedData, null, 2),
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -112,7 +125,11 @@ export default function FormPage() {
         <div className="flex-1 flex flex-col">
           <div className="flex-1 relative">
             {/* User Profile Form */}
-            <div className={activeFormId === "user-profile" ? "block h-full" : "hidden"}>
+            <div
+              className={
+                activeFormId === "user-profile" ? "block h-full" : "hidden"
+              }
+            >
               <UserProfileForm
                 ref={userFormRef}
                 onStateChange={setUserFormState}
@@ -121,7 +138,11 @@ export default function FormPage() {
             </div>
 
             {/* Company Info Form */}
-            <div className={activeFormId === "company-info" ? "block h-full" : "hidden"}>
+            <div
+              className={
+                activeFormId === "company-info" ? "block h-full" : "hidden"
+              }
+            >
               <CompanyInfoForm
                 ref={companyFormRef}
                 onStateChange={setCompanyFormState}

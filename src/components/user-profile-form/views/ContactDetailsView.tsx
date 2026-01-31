@@ -1,8 +1,8 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { FormData } from "@/lib/schemas/formSchema";
 import { Input } from "@/components/ui/Input";
+import type { FormData } from "@/lib/schemas/formSchema";
 
 export function ContactDetailsView() {
   const {

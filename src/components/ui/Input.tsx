@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, InputHTMLAttributes } from "react";
+import { forwardRef, type InputHTMLAttributes } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -35,11 +35,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {error && (
-          <span className="text-sm text-red-500 dark:text-red-400">{error}</span>
+          <span className="text-sm text-red-500 dark:text-red-400">
+            {error}
+          </span>
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

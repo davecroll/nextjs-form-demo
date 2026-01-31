@@ -1,7 +1,7 @@
 "use client";
 
-import { useFormContext, Controller } from "react-hook-form";
-import { FormData } from "@/lib/schemas/formSchema";
+import { Controller, useFormContext } from "react-hook-form";
+import type { FormData } from "@/lib/schemas/formSchema";
 
 export function PreferencesView() {
   const {
