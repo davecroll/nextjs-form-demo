@@ -1,39 +1,52 @@
 "use client";
 
-import { useFormContext } from "react-hook-form";
-import { useFormView } from "@/contexts/FormViewContext";
-import { formViews, FormData } from "@/lib/schemas/formSchema";
+import { FormRegistration } from "./types";
 import { FormNavItem } from "./FormNavItem";
 
-export function FormSidebar() {
-  const { activeView, setActiveView, visitedViews } = useFormView();
-  const {
-    formState: { errors },
-  } = useFormContext<FormData>();
+interface FormSidebarProps {
+  forms: FormRegistration[];
+  activeFormId: string;
+  onFormSelect: (formId: string) => void;
+}
 
-  // Count errors per view by checking which fields belong to each view
-  const getErrorCountForView = (fields: readonly string[]): number => {
-    return fields.filter((field) => field in errors).length;
-  };
-
+export function FormSidebar({ forms, activeFormId, onFormSelect }: FormSidebarProps) {
   return (
-    <aside className="w-64 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-        Form Sections
-      </h2>
-      <nav className="space-y-1">
-        {formViews.map((view) => (
-          <FormNavItem
-            key={view.id}
-            viewId={view.id}
-            label={view.label}
-            isActive={activeView === view.id}
-            isVisited={visitedViews.has(view.id)}
-            errorCount={getErrorCountForView(view.fields)}
-            onClick={() => setActiveView(view.id)}
-          />
-        ))}
-      </nav>
+    <aside className="w-64 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto">
+      {forms.map((form) => (
+        <div key={form.id} className="mb-6">
+          <button
+            type="button"
+            onClick={() => onFormSelect(form.id)}
+            className={`
+              w-full text-left text-sm font-semibold mb-2 px-2 py-1 rounded
+              transition-colors
+              ${
+                activeFormId === form.id
+                  ? "text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }
+            `}
+          >
+            {form.label}
+          </button>
+
+          {activeFormId === form.id && (
+            <nav className="space-y-1">
+              {form.views.map((view) => (
+                <FormNavItem
+                  key={view.id}
+                  viewId={view.id}
+                  label={view.label}
+                  isActive={form.state.activeView === view.id}
+                  isVisited={form.state.visitedViews.includes(view.id)}
+                  errorCount={form.state.errorCounts[view.id] || 0}
+                  onClick={() => form.ref.current?.setActiveView(view.id)}
+                />
+              ))}
+            </nav>
+          )}
+        </div>
+      ))}
     </aside>
   );
 }
