@@ -13,20 +13,13 @@ export function CompanyDetailsView() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-          Company Details
-        </h3>
-        <p className="text-gray-600 dark:text-gray-400">
-          Additional information about your company.
-        </p>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Company Details</h3>
+        <p className="text-gray-600 dark:text-gray-400">Additional information about your company.</p>
       </div>
 
       <div className="space-y-4">
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="companySize"
-            className="text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
+          <label htmlFor="companySize" className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Company Size
           </label>
           <select
@@ -48,9 +41,7 @@ export function CompanyDetailsView() {
             <option value="500+">500+ employees</option>
           </select>
           {errors.companySize && (
-            <span className="text-sm text-red-500 dark:text-red-400">
-              {errors.companySize.message}
-            </span>
+            <span className="text-sm text-red-500 dark:text-red-400">{errors.companySize.message}</span>
           )}
         </div>
 
@@ -63,10 +54,7 @@ export function CompanyDetailsView() {
         />
 
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="description"
-            className="text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
+          <label htmlFor="description" className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Company Description
           </label>
           <textarea
@@ -85,9 +73,7 @@ export function CompanyDetailsView() {
             `}
           />
           {errors.description && (
-            <span className="text-sm text-red-500 dark:text-red-400">
-              {errors.description.message}
-            </span>
+            <span className="text-sm text-red-500 dark:text-red-400">{errors.description.message}</span>
           )}
         </div>
       </div>

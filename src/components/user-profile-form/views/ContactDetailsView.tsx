@@ -13,12 +13,8 @@ export function ContactDetailsView() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-          Contact Details
-        </h3>
-        <p className="text-gray-600 dark:text-gray-400">
-          How can we reach you?
-        </p>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Contact Details</h3>
+        <p className="text-gray-600 dark:text-gray-400">How can we reach you?</p>
       </div>
 
       <div className="space-y-4">

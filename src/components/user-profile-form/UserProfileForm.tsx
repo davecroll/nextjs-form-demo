@@ -1,26 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import type {
-  FormState,
-  MultiViewFormHandle,
-} from "@/components/form-shared/types";
+import type { FormState, MultiViewFormHandle } from "@/components/form-shared/types";
 import { Button } from "@/components/ui/Button";
-import {
-  defaultFormValues,
-  type FormData,
-  formSchema,
-  formViews,
-  type ViewId,
-} from "@/lib/schemas/formSchema";
+import { defaultFormValues, type FormData, formSchema, formViews, type ViewId } from "@/lib/schemas/formSchema";
 import { ContactDetailsView } from "./views/ContactDetailsView";
 import { PersonalInfoView } from "./views/PersonalInfoView";
 import { PreferencesView } from "./views/PreferencesView";
@@ -39,10 +24,7 @@ interface UserProfileFormProps {
   managed?: boolean;
 }
 
-export const UserProfileForm = forwardRef<
-  MultiViewFormHandle<FormData>,
-  UserProfileFormProps
->(function UserProfileForm(
+export const UserProfileForm = forwardRef<MultiViewFormHandle<FormData>, UserProfileFormProps>(function UserProfileForm(
   { onSubmit, onStateChange, initialView = "personal", managed = false },
   ref,
 ) {
@@ -96,12 +78,8 @@ export const UserProfileForm = forwardRef<
     const currentView = formViews.find((v) => v.id === activeView);
     if (!currentView) return true;
 
-    const result = await trigger(
-      currentView.fields as unknown as (keyof FormData)[],
-    );
-    setVisitedViews((prev) =>
-      prev.includes(activeView) ? prev : [...prev, activeView],
-    );
+    const result = await trigger(currentView.fields as unknown as (keyof FormData)[]);
+    setVisitedViews((prev) => (prev.includes(activeView) ? prev : [...prev, activeView]));
     return result;
   }, [activeView, trigger]);
 
@@ -144,15 +122,7 @@ export const UserProfileForm = forwardRef<
       getValues,
       getActiveView,
     }),
-    [
-      setActiveView,
-      goToNextView,
-      goToPreviousView,
-      validateCurrentView,
-      validate,
-      getValues,
-      getActiveView,
-    ],
+    [setActiveView, goToNextView, goToPreviousView, validateCurrentView, validate, getValues, getActiveView],
   );
 
   const onFormSubmit = handleSubmit((data) => {
@@ -170,12 +140,7 @@ export const UserProfileForm = forwardRef<
 
         {!managed && (
           <div className="flex justify-between pt-6 border-t border-gray-200 dark:border-gray-700 mt-8">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={goToPreviousView}
-              disabled={isFirstView}
-            >
+            <Button type="button" variant="outline" onClick={goToPreviousView} disabled={isFirstView}>
               Previous
             </Button>
 

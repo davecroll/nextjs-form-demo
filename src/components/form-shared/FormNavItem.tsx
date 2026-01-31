@@ -9,13 +9,7 @@ interface FormNavItemProps {
   onClick: () => void;
 }
 
-export function FormNavItem({
-  label,
-  isActive,
-  isVisited,
-  errorCount,
-  onClick,
-}: FormNavItemProps) {
+export function FormNavItem({ label, isActive, isVisited, errorCount, onClick }: FormNavItemProps) {
   const hasErrors = errorCount > 0;
   // Show checkmark if visited (validated) and no errors
   const isValid = isVisited && !hasErrors;
@@ -57,12 +51,7 @@ export function FormNavItem({
             aria-label="Valid"
             role="img"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         )}
       </span>

@@ -3,17 +3,10 @@
 import { useCallback, useRef, useState } from "react";
 import { CompanyInfoForm } from "@/components/company-form/CompanyInfoForm";
 import { FormSidebar } from "@/components/form-shared/FormSidebar";
-import type {
-  FormRegistration,
-  FormState,
-  MultiViewFormHandle,
-} from "@/components/form-shared/types";
+import type { FormRegistration, FormState, MultiViewFormHandle } from "@/components/form-shared/types";
 import { Button } from "@/components/ui/Button";
 import { UserProfileForm } from "@/components/user-profile-form/UserProfileForm";
-import {
-  type CompanyFormData,
-  companyViews,
-} from "@/lib/schemas/companySchema";
+import { type CompanyFormData, companyViews } from "@/lib/schemas/companySchema";
 import { type FormData, formViews } from "@/lib/schemas/formSchema";
 
 const initialUserFormState: FormState = {
@@ -37,11 +30,8 @@ export default function FormPage() {
   const [activeFormId, setActiveFormId] = useState("user-profile");
 
   // Track state for each form (for sidebar display)
-  const [userFormState, setUserFormState] =
-    useState<FormState>(initialUserFormState);
-  const [companyFormState, setCompanyFormState] = useState<FormState>(
-    initialCompanyFormState,
-  );
+  const [userFormState, setUserFormState] = useState<FormState>(initialUserFormState);
+  const [companyFormState, setCompanyFormState] = useState<FormState>(initialCompanyFormState);
 
   // Submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -95,10 +85,7 @@ export default function FormPage() {
       };
 
       console.log("All forms submitted:", combinedData);
-      alert(
-        "All forms submitted successfully!\n\n" +
-          JSON.stringify(combinedData, null, 2),
-      );
+      alert("All forms submitted successfully!\n\n" + JSON.stringify(combinedData, null, 2));
     } finally {
       setIsSubmitting(false);
     }
@@ -107,58 +94,30 @@ export default function FormPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       <header className="border-b border-gray-200 dark:border-gray-800 px-6 py-4">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Registration
-        </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-          Complete both forms to finish registration
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Registration</h1>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Complete both forms to finish registration</p>
       </header>
 
       <main className="flex h-[calc(100vh-89px)]">
-        <FormSidebar
-          forms={forms}
-          activeFormId={activeFormId}
-          onFormSelect={setActiveFormId}
-        />
+        <FormSidebar forms={forms} activeFormId={activeFormId} onFormSelect={setActiveFormId} />
 
         <div className="flex-1 flex flex-col">
           <div className="flex-1 relative">
             {/* User Profile Form */}
-            <div
-              className={
-                activeFormId === "user-profile" ? "block h-full" : "hidden"
-              }
-            >
-              <UserProfileForm
-                ref={userFormRef}
-                onStateChange={setUserFormState}
-                managed
-              />
+            <div className={activeFormId === "user-profile" ? "block h-full" : "hidden"}>
+              <UserProfileForm ref={userFormRef} onStateChange={setUserFormState} managed />
             </div>
 
             {/* Company Info Form */}
-            <div
-              className={
-                activeFormId === "company-info" ? "block h-full" : "hidden"
-              }
-            >
-              <CompanyInfoForm
-                ref={companyFormRef}
-                onStateChange={setCompanyFormState}
-                managed
-              />
+            <div className={activeFormId === "company-info" ? "block h-full" : "hidden"}>
+              <CompanyInfoForm ref={companyFormRef} onStateChange={setCompanyFormState} managed />
             </div>
           </div>
 
           {/* Unified submit button */}
           <div className="border-t border-gray-200 dark:border-gray-700 px-8 py-4 bg-gray-50 dark:bg-gray-900">
             <div className="flex justify-end">
-              <Button
-                type="button"
-                onClick={handleUnifiedSubmit}
-                disabled={isSubmitting}
-              >
+              <Button type="button" onClick={handleUnifiedSubmit} disabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Submit All"}
               </Button>
             </div>

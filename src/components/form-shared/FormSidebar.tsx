@@ -9,11 +9,7 @@ interface FormSidebarProps {
   onFormSelect: (formId: string) => void;
 }
 
-export function FormSidebar({
-  forms,
-  activeFormId,
-  onFormSelect,
-}: FormSidebarProps) {
+export function FormSidebar({ forms, activeFormId, onFormSelect }: FormSidebarProps) {
   return (
     <aside className="w-64 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto">
       {forms.map((form) => {
@@ -49,9 +45,7 @@ export function FormSidebar({
                   errorCount={form.state.errorCounts[view.id] || 0}
                   onClick={async () => {
                     // Validate current form's current view before switching
-                    const currentForm = forms.find(
-                      (f) => f.id === activeFormId,
-                    );
+                    const currentForm = forms.find((f) => f.id === activeFormId);
                     if (currentForm?.ref.current) {
                       await currentForm.ref.current.validateCurrentView();
                     }

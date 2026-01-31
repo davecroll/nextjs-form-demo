@@ -13,12 +13,8 @@ export function CompanyBasicsView() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-          Company Basics
-        </h3>
-        <p className="text-gray-600 dark:text-gray-400">
-          Tell us about your company.
-        </p>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Company Basics</h3>
+        <p className="text-gray-600 dark:text-gray-400">Tell us about your company.</p>
       </div>
 
       <div className="space-y-4">
@@ -30,10 +26,7 @@ export function CompanyBasicsView() {
         />
 
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="industry"
-            className="text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
+          <label htmlFor="industry" className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Industry
           </label>
           <select
@@ -56,11 +49,7 @@ export function CompanyBasicsView() {
             <option value="manufacturing">Manufacturing</option>
             <option value="other">Other</option>
           </select>
-          {errors.industry && (
-            <span className="text-sm text-red-500 dark:text-red-400">
-              {errors.industry.message}
-            </span>
-          )}
+          {errors.industry && <span className="text-sm text-red-500 dark:text-red-400">{errors.industry.message}</span>}
         </div>
       </div>
     </div>
