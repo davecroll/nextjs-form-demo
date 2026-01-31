@@ -41,7 +41,7 @@ export function FormSidebar({ forms, activeFormId, onFormSelect }: FormSidebarPr
                   viewId={view.id}
                   label={view.label}
                   isActive={isActiveForm && form.state.activeView === view.id}
-                  isVisited={form.state.visitedViews.includes(view.id)}
+                  isValidated={form.state.validatedViews.includes(view.id)}
                   errorCount={form.state.errorCounts[view.id] || 0}
                   onClick={() => {
                     // First switch to this form, then switch to the view

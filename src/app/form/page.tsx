@@ -11,13 +11,13 @@ import { MultiViewFormHandle, FormState, FormRegistration } from "@/components/f
 
 const initialUserFormState: FormState = {
   activeView: "personal",
-  visitedViews: ["personal"],
+  validatedViews: [],
   errorCounts: { personal: 0, contact: 0, preferences: 0 },
 };
 
 const initialCompanyFormState: FormState = {
   activeView: "basics",
-  visitedViews: ["basics"],
+  validatedViews: [],
   errorCounts: { basics: 0, details: 0 },
 };
 

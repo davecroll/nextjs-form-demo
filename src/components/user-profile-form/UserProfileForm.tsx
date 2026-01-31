@@ -39,7 +39,7 @@ interface UserProfileFormProps {
 export const UserProfileForm = forwardRef<MultiViewFormHandle<FormData>, UserProfileFormProps>(
   function UserProfileForm({ onSubmit, onStateChange, initialView = "personal", managed = false }, ref) {
     const [activeView, setActiveViewState] = useState<ViewId>(initialView);
-    const [visitedViews, setVisitedViews] = useState<string[]>([initialView]);
+    const [validatedViews, setValidatedViews] = useState<string[]>([]);
 
     const methods = useForm<FormData>({
       resolver: zodResolver(formSchema),
@@ -67,40 +67,57 @@ export const UserProfileForm = forwardRef<MultiViewFormHandle<FormData>, UserPro
     useEffect(() => {
       onStateChange?.({
         activeView,
-        visitedViews,
+        validatedViews,
         errorCounts: getErrorCounts(),
       });
-    }, [activeView, visitedViews, errors, onStateChange, getErrorCounts]);
+    }, [activeView, validatedViews, errors, onStateChange, getErrorCounts]);
 
-    const setActiveView = useCallback((viewId: string) => {
-      const validViewId = viewId as ViewId;
-      setActiveViewState(validViewId);
-      setVisitedViews((prev) =>
-        prev.includes(validViewId) ? prev : [...prev, validViewId]
-      );
-    }, []);
+    // Validate current view's fields before switching to a new view
+    const setActiveView = useCallback(
+      async (viewId: string) => {
+        const validViewId = viewId as ViewId;
+
+        // Only validate if actually switching to a different view
+        if (validViewId === activeView) {
+          return;
+        }
+
+        // Validate current view's fields before leaving
+        const currentView = formViews.find((v) => v.id === activeView);
+        if (currentView) {
+          await trigger(currentView.fields as unknown as (keyof FormData)[]);
+          // Mark the view we're leaving as validated
+          setValidatedViews((prev) =>
+            prev.includes(activeView) ? prev : [...prev, activeView]
+          );
+        }
+
+        setActiveViewState(validViewId);
+      },
+      [activeView, trigger]
+    );
 
     const currentIndex = formViews.findIndex((v) => v.id === activeView);
     const isFirstView = currentIndex === 0;
     const isLastView = currentIndex === formViews.length - 1;
 
-    const goToNextView = useCallback(() => {
+    const goToNextView = useCallback(async () => {
       if (currentIndex < formViews.length - 1) {
-        setActiveView(formViews[currentIndex + 1].id);
+        await setActiveView(formViews[currentIndex + 1].id);
       }
     }, [currentIndex, setActiveView]);
 
-    const goToPreviousView = useCallback(() => {
+    const goToPreviousView = useCallback(async () => {
       if (currentIndex > 0) {
-        setActiveView(formViews[currentIndex - 1].id);
+        await setActiveView(formViews[currentIndex - 1].id);
       }
     }, [currentIndex, setActiveView]);
 
     // Validate the entire form and return whether it's valid
     const validate = useCallback(async (): Promise<boolean> => {
       const result = await trigger();
-      // Mark all views as visited so errors show
-      setVisitedViews(formViews.map((v) => v.id));
+      // Mark all views as validated
+      setValidatedViews(formViews.map((v) => v.id));
       return result;
     }, [trigger]);
 
