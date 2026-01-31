@@ -1,9 +1,7 @@
 "use client";
 
-import { ViewId } from "@/lib/schemas/formSchema";
-
 interface FormNavItemProps {
-  viewId: ViewId;
+  viewId: string;
   label: string;
   isActive: boolean;
   isVisited: boolean;

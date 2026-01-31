@@ -10,40 +10,38 @@ import {
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  formSchema,
-  FormData,
-  defaultFormValues,
-  formViews,
-  ViewId,
-} from "@/lib/schemas/formSchema";
+  companySchema,
+  CompanyFormData,
+  defaultCompanyValues,
+  companyViews,
+  CompanyViewId,
+} from "@/lib/schemas/companySchema";
 import { Button } from "@/components/ui/Button";
-import { PersonalInfoView } from "./views/PersonalInfoView";
-import { ContactDetailsView } from "./views/ContactDetailsView";
-import { PreferencesView } from "./views/PreferencesView";
-import { MultiViewFormHandle, FormState } from "./types";
+import { CompanyBasicsView } from "./views/CompanyBasicsView";
+import { CompanyDetailsView } from "./views/CompanyDetailsView";
+import { MultiViewFormHandle, FormState } from "@/components/multi-view-form/types";
 
 const viewComponents = {
-  personal: PersonalInfoView,
-  contact: ContactDetailsView,
-  preferences: PreferencesView,
+  basics: CompanyBasicsView,
+  details: CompanyDetailsView,
 } as const;
 
-interface MultiViewFormProps {
-  onSubmit?: (data: FormData) => void;
+interface CompanyInfoFormProps {
+  onSubmit?: (data: CompanyFormData) => void;
   onStateChange?: (state: FormState) => void;
-  initialView?: ViewId;
+  initialView?: CompanyViewId;
   /** When true, hides internal navigation buttons (for external control) */
   managed?: boolean;
 }
 
-export const MultiViewForm = forwardRef<MultiViewFormHandle<FormData>, MultiViewFormProps>(
-  function MultiViewForm({ onSubmit, onStateChange, initialView = "personal", managed = false }, ref) {
-    const [activeView, setActiveViewState] = useState<ViewId>(initialView);
+export const CompanyInfoForm = forwardRef<MultiViewFormHandle<CompanyFormData>, CompanyInfoFormProps>(
+  function CompanyInfoForm({ onSubmit, onStateChange, initialView = "basics", managed = false }, ref) {
+    const [activeView, setActiveViewState] = useState<CompanyViewId>(initialView);
     const [visitedViews, setVisitedViews] = useState<string[]>([initialView]);
 
-    const methods = useForm<FormData>({
-      resolver: zodResolver(formSchema),
-      defaultValues: defaultFormValues,
+    const methods = useForm<CompanyFormData>({
+      resolver: zodResolver(companySchema),
+      defaultValues: defaultCompanyValues,
       mode: "onBlur",
     });
 
@@ -57,7 +55,7 @@ export const MultiViewForm = forwardRef<MultiViewFormHandle<FormData>, MultiView
     // Calculate error counts per view
     const getErrorCounts = useCallback((): Record<string, number> => {
       const counts: Record<string, number> = {};
-      for (const view of formViews) {
+      for (const view of companyViews) {
         counts[view.id] = view.fields.filter((field) => field in errors).length;
       }
       return counts;
@@ -73,26 +71,26 @@ export const MultiViewForm = forwardRef<MultiViewFormHandle<FormData>, MultiView
     }, [activeView, visitedViews, errors, onStateChange, getErrorCounts]);
 
     const setActiveView = useCallback((viewId: string) => {
-      const validViewId = viewId as ViewId;
+      const validViewId = viewId as CompanyViewId;
       setActiveViewState(validViewId);
       setVisitedViews((prev) =>
         prev.includes(validViewId) ? prev : [...prev, validViewId]
       );
     }, []);
 
-    const currentIndex = formViews.findIndex((v) => v.id === activeView);
+    const currentIndex = companyViews.findIndex((v) => v.id === activeView);
     const isFirstView = currentIndex === 0;
-    const isLastView = currentIndex === formViews.length - 1;
+    const isLastView = currentIndex === companyViews.length - 1;
 
     const goToNextView = useCallback(() => {
-      if (currentIndex < formViews.length - 1) {
-        setActiveView(formViews[currentIndex + 1].id);
+      if (currentIndex < companyViews.length - 1) {
+        setActiveView(companyViews[currentIndex + 1].id);
       }
     }, [currentIndex, setActiveView]);
 
     const goToPreviousView = useCallback(() => {
       if (currentIndex > 0) {
-        setActiveView(formViews[currentIndex - 1].id);
+        setActiveView(companyViews[currentIndex - 1].id);
       }
     }, [currentIndex, setActiveView]);
 
@@ -100,7 +98,7 @@ export const MultiViewForm = forwardRef<MultiViewFormHandle<FormData>, MultiView
     const validate = useCallback(async (): Promise<boolean> => {
       const result = await trigger();
       // Mark all views as visited so errors show
-      setVisitedViews(formViews.map((v) => v.id));
+      setVisitedViews(companyViews.map((v) => v.id));
       return result;
     }, [trigger]);
 

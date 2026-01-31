@@ -1,22 +1,31 @@
 import { RefObject } from "react";
-import { ViewId, formViews } from "@/lib/schemas/formSchema";
 
-export interface MultiViewFormHandle {
-  setActiveView: (viewId: ViewId) => void;
+// Generic view configuration type
+export interface ViewConfig {
+  id: string;
+  label: string;
+  fields: readonly string[];
+}
+
+// Generic form handle - works with any form data type
+export interface MultiViewFormHandle<T = unknown> {
+  setActiveView: (viewId: string) => void;
   goToNextView: () => void;
   goToPreviousView: () => void;
+  validate: () => Promise<boolean>;
+  getValues: () => T;
 }
 
 export interface FormState {
-  activeView: ViewId;
-  visitedViews: ViewId[];
-  errorCounts: Record<ViewId, number>;
+  activeView: string;
+  visitedViews: string[];
+  errorCounts: Record<string, number>;
 }
 
-export interface FormRegistration {
+export interface FormRegistration<T = unknown> {
   id: string;
   label: string;
-  ref: RefObject<MultiViewFormHandle | null>;
-  views: typeof formViews;
+  ref: RefObject<MultiViewFormHandle<T> | null>;
+  views: readonly ViewConfig[];
   state: FormState;
 }
