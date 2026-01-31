@@ -18,13 +18,13 @@ import { type FormData, formViews } from "@/lib/schemas/formSchema";
 
 const initialUserFormState: FormState = {
   activeView: "personal",
-  validatedViews: [],
+  visitedViews: [],
   errorCounts: { personal: 0, contact: 0, preferences: 0 },
 };
 
 const initialCompanyFormState: FormState = {
   activeView: "basics",
-  validatedViews: [],
+  visitedViews: [],
   errorCounts: { basics: 0, details: 0 },
 };
 

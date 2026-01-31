@@ -18,7 +18,7 @@ export interface MultiViewFormHandle<T = unknown> {
 
 export interface FormState {
   activeView: string;
-  validatedViews: string[];
+  visitedViews: string[];
   errorCounts: Record<string, number>;
 }
 

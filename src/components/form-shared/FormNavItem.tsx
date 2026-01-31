@@ -4,7 +4,7 @@ interface FormNavItemProps {
   viewId: string;
   label: string;
   isActive: boolean;
-  isValidated: boolean;
+  isVisited: boolean;
   errorCount: number;
   onClick: () => void;
 }
@@ -12,12 +12,13 @@ interface FormNavItemProps {
 export function FormNavItem({
   label,
   isActive,
-  isValidated,
+  isVisited,
   errorCount,
   onClick,
 }: FormNavItemProps) {
   const hasErrors = errorCount > 0;
-  const isValid = isValidated && !hasErrors;
+  // Show checkmark if visited (validated) and no errors
+  const isValid = isVisited && !hasErrors;
 
   return (
     <button

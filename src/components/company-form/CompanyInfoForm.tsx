@@ -45,7 +45,7 @@ export const CompanyInfoForm = forwardRef<
   ref,
 ) {
   const [activeView, setActiveViewState] = useState<CompanyViewId>(initialView);
-  const [validatedViews, setValidatedViews] = useState<string[]>([]);
+  const [visitedViews, setVisitedViews] = useState<string[]>([]);
 
   const methods = useForm<CompanyFormData>({
     resolver: zodResolver(companySchema),
@@ -73,10 +73,10 @@ export const CompanyInfoForm = forwardRef<
   useEffect(() => {
     onStateChange?.({
       activeView,
-      validatedViews,
+      visitedViews,
       errorCounts: getErrorCounts(),
     });
-  }, [activeView, validatedViews, onStateChange, getErrorCounts]);
+  }, [activeView, visitedViews, onStateChange, getErrorCounts]);
 
   // Validate current view's fields before switching to a new view
   const setActiveView = useCallback(
@@ -88,14 +88,14 @@ export const CompanyInfoForm = forwardRef<
         return;
       }
 
-      // Validate current view's fields before leaving
+      // Validate current view before leaving
       const currentView = companyViews.find((v) => v.id === activeView);
       if (currentView) {
         await trigger(
           currentView.fields as unknown as (keyof CompanyFormData)[],
         );
-        // Mark the view we're leaving as validated
-        setValidatedViews((prev) =>
+        // Mark the view we're leaving as visited (validated)
+        setVisitedViews((prev) =>
           prev.includes(activeView) ? prev : [...prev, activeView],
         );
       }
@@ -124,8 +124,8 @@ export const CompanyInfoForm = forwardRef<
   // Validate the entire form and return whether it's valid
   const validate = useCallback(async (): Promise<boolean> => {
     const result = await trigger();
-    // Mark all views as validated
-    setValidatedViews(companyViews.map((v) => v.id));
+    // Mark all views as visited
+    setVisitedViews(companyViews.map((v) => v.id));
     return result;
   }, [trigger]);
 
